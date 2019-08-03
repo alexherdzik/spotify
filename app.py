@@ -1,7 +1,7 @@
 import json
 import base64
 import requests
-from flask import Flask, request, redirect
+from flask import Flask, request, redirect, render_template
 
 app = Flask(__name__)
 
@@ -12,7 +12,7 @@ CLIENT_CREDENTIALS = f'{CLIENT_ID}:{CLIENT_SECRET}'
 
 #Server Parameters
 REDIRECT_URI = 'http://localhost:5000/callback'
-SCOPE = 'user-library-read'
+SCOPE = 'user-top-read'
 
 #Spotify URLs
 SPOTIFY_AUTH_URL = 'https://accounts.spotify.com/authorize'
@@ -45,11 +45,19 @@ def callback():
 
         authorization_header = {'Authorization': f'Bearer {access_token}'}
 
+        user_top_tracks_api_endpoint = f'{SPOTIFY_API_URL}/me/top/tracks'
+        user_top_tracks_request = requests.get(user_top_tracks_api_endpoint, headers=authorization_header)
+        user_top_tracks_data = json.loads(user_top_tracks_request.text)
+        user_top_tracks_list = user_top_tracks_data['items']
+        return render_template('callback.html', tracks=user_top_tracks_list)
+
+        """
         user_profile_api_endpoint = f'{SPOTIFY_API_URL}/me'
         profile_request = requests.get(user_profile_api_endpoint, headers=authorization_header)
 
         profile_data = json.loads(profile_request.text)
 
         return f'{profile_request.text}'
+        """
     else:
         return 'Nothing doin'
