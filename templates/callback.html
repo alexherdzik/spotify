@@ -1,0 +1,18 @@
+{% extends "layout.html" %}
+
+{% block heading %}
+  User Top Tracks
+{% endblock %}
+
+{% block body %}
+    {% for track in tracks %}
+      <div class="card mb-3">
+        <div class="card-body">
+          <h5 class="card-title">{{ track.name }}</h5>
+          <h6 class="card-subtitle mb-2 text-muted">
+            {{ track.artists[0].name }}
+          </h6>
+        </div>
+      </div>
+    {% endfor %}
+{% endblock %}
