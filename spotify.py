@@ -17,11 +17,15 @@ SPOTIFY_AUTH_URL = 'https://accounts.spotify.com/authorize'
 SPOTIFY_TOKEN_URL = 'https://accounts.spotify.com/api/token'
 SPOTIFY_API_URL = 'https://api.spotify.com/v1'
 
+#Authentication Header
+AUTHORIZATION_HEADER = ''
+
 #Needs work
 def app_authorization():
     return f'{SPOTIFY_AUTH_URL}?response_type=code&client_id={CLIENT_ID}&scope={SCOPE}&redirect_uri={REDIRECT_URI}'
 
 def user_authorization():
+    global AUTHORIZATION_HEADER
     auth_code = request.args.get('code')
     code_payload = {
         'grant_type': 'authorization_code',
@@ -39,11 +43,11 @@ def user_authorization():
     token_type = response_data['token_type']
     expires_in = response_data['expires_in']
 
-    authorization_header = {'Authorization': f'Bearer {access_token}'}
-    return authorization_header
+    AUTHORIZATION_HEADER = {'Authorization': f'Bearer {access_token}'}
+    return
 
-def get_user_top_tracks(authorization_header):
-    user_top_tracks_api_endpoint = f'{SPOTIFY_API_URL}/me/top/tracks'
-    user_top_tracks_request = requests.get(user_top_tracks_api_endpoint, headers=authorization_header)
+def get_user_top_tracks(time_range):
+    user_top_tracks_api_endpoint = f'{SPOTIFY_API_URL}/me/top/tracks?time_range={time_range}'
+    user_top_tracks_request = requests.get(user_top_tracks_api_endpoint, headers=AUTHORIZATION_HEADER)
     user_top_tracks_data = json.loads(user_top_tracks_request.text)
     return user_top_tracks_data['items']

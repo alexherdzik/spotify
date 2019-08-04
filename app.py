@@ -1,4 +1,4 @@
-from flask import Flask, request, redirect, render_template
+from flask import Flask, request, redirect, render_template, url_for
 from spotify import app_authorization, user_authorization, get_user_top_tracks
 
 app = Flask(__name__)
@@ -10,15 +10,15 @@ def index():
 
 @app.route('/callback')
 def callback():
-    authorization_header = user_authorization()
-    user_top_tracks = get_user_top_tracks(authorization_header)
-    return render_template('callback.html', tracks=user_top_tracks)
+    user_authorization()
+    return redirect(url_for('home'))
 
-    """
-    user_profile_api_endpoint = f'{SPOTIFY_API_URL}/me'
-    profile_request = requests.get(user_profile_api_endpoint, headers=authorization_header)
+@app.route('/home')
+def home():
+    return render_template('home.html')
 
-    profile_data = json.loads(profile_request.text)
-
-    return f'{profile_request.text}'
-    """
+@app.route('/top-tracks')
+def top_tracks():
+    time_range = request.args.get('time_range', 'medium_term', type=str)
+    user_top_tracks = get_user_top_tracks(time_range)
+    return render_template('top_tracks.html', tracks=user_top_tracks)
