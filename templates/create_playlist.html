@@ -8,7 +8,7 @@
     <nav aria-label="breadcrumb">
       <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="{{ url_for('home') }}">Home</a></li>
-        <li class="breadcrumb-item"><a href="{{ url_for('top_tracks') }}">Top Tracks</a></li>
+        <li class="breadcrumb-item"><a href="{{ url_for('top_tracks', time_range=time_range) }}">Top Tracks</a></li>
         <li class="breadcrumb-item active" aria-current="page">Create Playlist</li>
       </ol>
     </nav>
