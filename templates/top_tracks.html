@@ -11,6 +11,7 @@
         <li class="breadcrumb-item active" aria-current="page">Top Tracks</li>
       </ol>
     </nav>
+    <a class="btn btn-primary" href="{{ url_for('create_playlist', time_range='short_term') }}">Create playlist</a>
     {% for track in tracks %}
       <div class="card mb-3">
         <div class="card-body">

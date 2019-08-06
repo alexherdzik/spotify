@@ -10,7 +10,7 @@ CLIENT_CREDENTIALS = f'{CLIENT_ID}:{CLIENT_SECRET}'
 
 #Server Parameters
 REDIRECT_URI = 'http://localhost:5000/callback'
-SCOPE = 'user-top-read'
+SCOPE = 'playlist-modify-public user-top-read'
 
 #Spotify URLs
 SPOTIFY_AUTH_URL = 'https://accounts.spotify.com/authorize'
@@ -51,3 +51,43 @@ def get_user_top_tracks(time_range):
     user_top_tracks_request = requests.get(user_top_tracks_api_endpoint, headers=AUTHORIZATION_HEADER)
     user_top_tracks_data = json.loads(user_top_tracks_request.text)
     return user_top_tracks_data['items']
+
+def get_user_top_tracks_uris(time_range):
+    user_top_tracks = get_user_top_tracks(time_range)
+    uris = []
+    for track in user_top_tracks:
+        uris.append(track['uri'])
+    return uris
+
+def get_user_profile():
+    curr_user_api_endpoint = f'{SPOTIFY_API_URL}/me'
+    curr_user_request = requests.get(curr_user_api_endpoint, headers=AUTHORIZATION_HEADER)
+    curr_user_data = json.loads(curr_user_request.text)
+    return curr_user_data
+
+def create_user_playlist(name):
+    user = get_user_profile()['id']
+    create_playlist_api_endpoint = f'{SPOTIFY_API_URL}/users/{user}/playlists'
+    parameters = {
+        'name': str(name),
+        'public': True,
+        'collaborative': False,
+        'description': 'Created by me'
+    }
+    create_playlist_request = requests.post(create_playlist_api_endpoint, json=parameters, headers=AUTHORIZATION_HEADER)
+    create_playlist_data = json.loads(create_playlist_request.text)
+    return create_playlist_data['uri']
+
+def get_playlist_id(playlist_uri):
+    start_index = playlist_uri.rfind(':') + 1
+    return playlist_uri[start_index:]
+
+def add_tracks_to_playlist(playlist_id, track_uris):
+    add_tracks_api_endpoint = f'{SPOTIFY_API_URL}/playlists/{playlist_id}/tracks'
+    parameters = {
+        'uris': track_uris,
+        'position': 0
+    }
+    add_tracks_request = requests.post(add_tracks_api_endpoint, json=parameters, headers=AUTHORIZATION_HEADER)
+    add_tracks_data = json.loads(add_tracks_request.text)
+    return add_tracks_data['snapshot_id']
