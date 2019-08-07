@@ -5,7 +5,8 @@
 {% endblock %}
 
 {% block body %}
-  <a class="btn btn-primary" href="{{ url_for('top_tracks', time_range='short_term') }}">Short</a>
-  <a class="btn btn-primary" href="{{ url_for('top_tracks', time_range='medium_term') }}">Medium</a>
-  <a class="btn btn-primary" href="{{ url_for('top_tracks', time_range='long_term') }}">Long</a>
+  <a class="btn btn-primary" href="{{ url_for('top_tracks') }}">My Top Tracks</a>
+  <!-- <a class="btn btn-primary" href="{{ url_for('top_tracks', time_range='short_term') }}">Short</a> -->
+  <!-- <a class="btn btn-primary" href="{{ url_for('top_tracks', time_range='medium_term') }}">Medium</a> -->
+  <!-- <a class="btn btn-primary" href="{{ url_for('top_tracks', time_range='long_term') }}">Long</a> -->
 {% endblock %}

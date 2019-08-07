@@ -1,5 +1,5 @@
 from flask import Flask, request, redirect, render_template, url_for
-from spotify import app_authorization, user_authorization, get_user_top_tracks, get_user_top_tracks_uris, create_user_playlist, add_tracks_to_playlist, get_playlist_id
+from spotify import app_authorization, user_authorization, get_user_top_tracks_all, get_user_top_tracks_uris, create_user_playlist, add_tracks_to_playlist, get_playlist_id
 
 app = Flask(__name__)
 
@@ -19,10 +19,10 @@ def home():
 
 @app.route('/top-tracks')
 def top_tracks():
-    time_range = request.args.get('time_range', 'medium_term', type=str)
-    limit = request.args.get('limit', 20, type=int)
-    user_top_tracks = get_user_top_tracks(time_range)
-    return render_template('top_tracks.html', tracks=user_top_tracks, time_range=time_range)
+    #time_range = request.args.get('time_range', 'medium_term', type=str)
+    #limit = request.args.get('limit', 20, type=int)
+    user_top_tracks_all = get_user_top_tracks_all()
+    return render_template('top_tracks.html', tracks=user_top_tracks_all)
 
 #Get song uris and build post request
 @app.route('/create-playlist')

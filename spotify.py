@@ -52,6 +52,13 @@ def get_user_top_tracks(time_range):
     user_top_tracks_data = json.loads(user_top_tracks_request.text)
     return user_top_tracks_data['items']
 
+def get_user_top_tracks_all():
+    time_ranges = ['short_term', 'medium_term', 'long_term']
+    user_top_tracks_all = {}
+    for time_range in time_ranges:
+        user_top_tracks_all[time_range] = get_user_top_tracks(time_range)
+    return user_top_tracks_all
+
 def get_user_top_tracks_uris(time_range):
     user_top_tracks = get_user_top_tracks(time_range)
     uris = []
