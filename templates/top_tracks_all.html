@@ -1,0 +1,118 @@
+{% extends "layout.html" %}
+
+{% block heading %}
+User Top Tracks
+{% endblock %}
+
+{% block body %}
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="{{ url_for('home') }}">Home</a></li>
+    <li class="breadcrumb-item active" aria-current="page">Top Tracks</li>
+  </ol>
+</nav>
+
+<ul class="nav nav-pills mb-3" role="tablist">
+  <li class="nav-item">
+    <a class="nav-link active" data-toggle="pill" href="#short-term" role="tab">Short Term</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" data-toggle="pill" href="#medium-term" role="tab">Medium Term</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" data-toggle="pill" href="#long-term" role="tab">Long Term</a>
+  </li>
+</ul>
+
+<div class="tab-content">
+  <div class="tab-pane show active" id="short-term" role="tabpanel">
+    <h2>Short Term</h2>
+    <div class="row">
+      <div class="col-12">
+        <a class="btn btn-success mb-3" href="{{ url_for('create_playlist', time_range='short_term') }}">Create Playlist</a>
+      </div>
+    </div>
+    {% for track in tracks.short_term %}
+    <div class="row">
+      <div class="col-12">
+        <div class="card mb-3">
+          <div class="row no-gutters">
+            <div class="col-1">
+              <img src="{{ track.album.images[1].url }}" class="card-img h-100" alt="Album artwork">
+            </div>
+            <div class="col-11">
+              <div class="card-body">
+                <h5 class="card-title">{{ track.name }}</h5>
+                <h6 class="card-subtitle mb-2 text-muted">
+                  {{ track.artists[0].name }}
+                </h6>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+
+  <div class="tab-pane" id="medium-term" role="tabpanel">
+    <h2>Medium Term</h2>
+    <div class="row">
+      <div class="col-12">
+        <a class="btn btn-success mb-3" href="{{ url_for('create_playlist', time_range='medium_term') }}">Create Playlist</a>
+      </div>
+    </div>
+    {% for track in tracks.medium_term %}
+    <div class="row">
+      <div class="col-12">
+        <div class="card mb-3">
+          <div class="row no-gutters">
+            <div class="col-1">
+              <img src="{{ track.album.images[1].url }}" class="card-img h-100" alt="Album artwork">
+            </div>
+            <div class="col-11">
+              <div class="card-body">
+                <h5 class="card-title">{{ track.name }}</h5>
+                <h6 class="card-subtitle mb-2 text-muted">
+                  {{ track.artists[0].name }}
+                </h6>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+
+  <div class="tab-pane" id="long-term" role="tabpanel">
+    <h2>Long Term</h2>
+    <div class="row">
+      <div class="col-12">
+        <a class="btn btn-success mb-3" href="{{ url_for('create_playlist', time_range='long_term') }}">Create Playlist</a>
+      </div>
+    </div>
+    {% for track in tracks.long_term %}
+    <div class="row">
+      <div class="col-12">
+        <div class="card mb-3">
+          <div class="row no-gutters">
+            <div class="col-1">
+              <img src="{{ track.album.images[1].url }}" class="card-img h-100" alt="Album artwork">
+            </div>
+            <div class="col-11">
+              <div class="card-body">
+                <h5 class="card-title">{{ track.name }}</h5>
+                <h6 class="card-subtitle mb-2 text-muted">
+                  {{ track.artists[0].name }}
+                </h6>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}

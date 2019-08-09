@@ -1,6 +1,7 @@
 import json
 import base64
 import requests
+import datetime
 from flask import request
 
 #Client Keys
@@ -46,8 +47,8 @@ def user_authorization():
     AUTHORIZATION_HEADER = {'Authorization': f'Bearer {access_token}'}
     return
 
-def get_user_top_tracks(time_range):
-    user_top_tracks_api_endpoint = f'{SPOTIFY_API_URL}/me/top/tracks?time_range={time_range}'
+def get_user_top_tracks(time_range, limit):
+    user_top_tracks_api_endpoint = f'{SPOTIFY_API_URL}/me/top/tracks?time_range={time_range}&limit={limit}'
     user_top_tracks_request = requests.get(user_top_tracks_api_endpoint, headers=AUTHORIZATION_HEADER)
     user_top_tracks_data = json.loads(user_top_tracks_request.text)
     return user_top_tracks_data['items']
@@ -59,8 +60,8 @@ def get_user_top_tracks_all():
         user_top_tracks_all[time_range] = get_user_top_tracks(time_range)
     return user_top_tracks_all
 
-def get_user_top_tracks_uris(time_range):
-    user_top_tracks = get_user_top_tracks(time_range)
+def get_user_top_tracks_uris(time_range, limit):
+    user_top_tracks = get_user_top_tracks(time_range, limit)
     uris = []
     for track in user_top_tracks:
         uris.append(track['uri'])
@@ -75,11 +76,12 @@ def get_user_profile():
 def create_user_playlist(name):
     user = get_user_profile()['id']
     create_playlist_api_endpoint = f'{SPOTIFY_API_URL}/users/{user}/playlists'
+    now = datetime.datetime.now()
     parameters = {
         'name': str(name),
         'public': True,
         'collaborative': False,
-        'description': 'Created by me'
+        'description': f'Created on {now.strftime("%b %d, %Y at %I:%M %p")}'
     }
     create_playlist_request = requests.post(create_playlist_api_endpoint, json=parameters, headers=AUTHORIZATION_HEADER)
     create_playlist_data = json.loads(create_playlist_request.text)
@@ -98,3 +100,11 @@ def add_tracks_to_playlist(playlist_id, track_uris):
     add_tracks_request = requests.post(add_tracks_api_endpoint, json=parameters, headers=AUTHORIZATION_HEADER)
     add_tracks_data = json.loads(add_tracks_request.text)
     return add_tracks_data['snapshot_id']
+
+def convert_time_range(time_range):
+    switcher = {
+        'short_term': '4 Weeks',
+        'medium_term': '6 Months',
+        'long_term': 'All Time'
+    }
+    return switcher.get(time_range, "Unknown")

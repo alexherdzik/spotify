@@ -1,0 +1,72 @@
+{% extends "layout.html" %}
+
+{% block heading %}
+Select Top Tracks
+{% endblock %}
+
+{% block body %}
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="{{ url_for('home') }}">Home</a></li>
+    <li class="breadcrumb-item active" aria-current="page">Select</li>
+  </ol>
+</nav>
+
+<form method="get" action="{{ url_for('top_tracks') }}">
+  <fieldset class="form-group">
+    <div class="row">
+      <legend class="col-form-label col-sm-2 pt-0">Time Length</legend>
+      <div class="col-sm-10">
+        <div class="form-check">
+          <div class="custom-control custom-radio">
+            <input type="radio" id="short-term" name="time_range" class="custom-control-input" value="short_term">
+            <label class="custom-control-label" for="short-term">Short (4 weeks)</label>
+          </div>
+        </div>
+        <div class="form-check">
+          <div class="custom-control custom-radio">
+            <input type="radio" id="medium-term" name="time_range" class="custom-control-input" value="medium_term" checked>
+            <label class="custom-control-label" for="medium-term">Medium (6 months)</label>
+          </div>
+        </div>
+        <div class="form-check">
+          <div class="custom-control custom-radio">
+            <input type="radio" id="long-term" name="time_range" class="custom-control-input" value="long_term">
+            <label class="custom-control-label" for="long-term">Long (All Time)</label>
+          </div>
+        </div>
+      </div>
+    </div>
+  </fieldset>
+  <fieldset class="form-group">
+    <div class="row">
+      <legend class="col-form-label col-sm-2 pt-0">Number of Tracks</legend>
+      <div class="col-sm-10">
+        <div class="form-check">
+          <div class="custom-control custom-radio">
+            <input type="radio" id="limit-10" name="limit" class="custom-control-input" value="10">
+            <label class="custom-control-label" for="limit-10">10</label>
+          </div>
+        </div>
+        <div class="form-check">
+          <div class="custom-control custom-radio">
+            <input type="radio" id="limit-25" name="limit" class="custom-control-input" value="25" checked>
+            <label class="custom-control-label" for="limit-25">25</label>
+          </div>
+        </div>
+        <div class="form-check">
+          <div class="custom-control custom-radio">
+            <input type="radio" id="limit-50" name="limit" class="custom-control-input" value="50">
+            <label class="custom-control-label" for="limit-50">50</label>
+          </div>
+        </div>
+      </div>
+    </div>
+  </fieldset>
+  <div class="form-group row">
+    <div class="col-sm-10">
+      <button type="submit" class="btn btn-primary">Show Top Tracks</button>
+    </div>
+  </div>
+</form>
+{% endblock %}
