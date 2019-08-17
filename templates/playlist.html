@@ -1,0 +1,37 @@
+{% extends "layout.html" %}
+
+{% block heading %}
+User Top Tracks
+{% endblock %}
+
+{% block body %}
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="{{ url_for('home') }}">Home</a></li>
+    <li class="breadcrumb-item"><a href="{{ url_for('playlists') }}">Playlists</a></li>
+    <li class="breadcrumb-item active" aria-current="page">Playlist</li>
+  </ol>
+</nav>
+
+{% for track in tracks %}
+<div class="row">
+  <div class="col-12">
+    <div class="card mb-3">
+      <div class="row no-gutters">
+        <div class="col-1">
+          <img src="{{ track.track.album.images[1].url }}" class="card-img h-100" alt="Album artwork">
+        </div>
+        <div class="col-11">
+          <div class="card-body">
+            <h5 class="card-title">{{ track.track.name }}</h5>
+            <h6 class="card-subtitle mb-2 text-muted">
+              {{ track.track.artists[0].name }}
+            </h6>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endfor %}
+{% endblock %}

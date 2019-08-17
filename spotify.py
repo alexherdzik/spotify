@@ -73,19 +73,32 @@ def get_user_profile():
     curr_user_data = json.loads(curr_user_request.text)
     return curr_user_data
 
-def create_user_playlist(name):
-    user = get_user_profile()['id']
+def get_spotify_username():
+    curr_user_api_endpoint = f'{SPOTIFY_API_URL}/me'
+    curr_user_request = requests.get(curr_user_api_endpoint, headers=AUTHORIZATION_HEADER)
+    curr_user_data = json.loads(curr_user_request.text)
+    return curr_user_data['id']
+
+def create_user_playlist(time_range, limit):
+    user = get_spotify_username()
     create_playlist_api_endpoint = f'{SPOTIFY_API_URL}/users/{user}/playlists'
     now = datetime.datetime.now()
+    time_range_title = convert_time_range(time_range)
+    name = f'Top {limit} ({time_range_title})'
     parameters = {
-        'name': str(name),
+        'name': name,
         'public': True,
         'collaborative': False,
         'description': f'Created on {now.strftime("%b %d, %Y at %I:%M %p")}'
     }
     create_playlist_request = requests.post(create_playlist_api_endpoint, json=parameters, headers=AUTHORIZATION_HEADER)
     create_playlist_data = json.loads(create_playlist_request.text)
-    return create_playlist_data['uri']
+
+    playlist_id = get_playlist_id(create_playlist_data['uri'])
+
+    #insert_playlist(playlist_id, user, time_range, limit, now, now)
+
+    return playlist_id
 
 def get_playlist_id(playlist_uri):
     start_index = playlist_uri.rfind(':') + 1
@@ -108,3 +121,32 @@ def convert_time_range(time_range):
         'long_term': 'All Time'
     }
     return switcher.get(time_range, "Unknown")
+
+#default is 20 playlists
+def check_user_playlist(playlist_id):
+    get_playlists_api_endpoint = f'{SPOTIFY_API_URL}/me/playlists'
+    get_playlists_response = requests.get(get_playlists_api_endpoint, headers=AUTHORIZATION_HEADER)
+    get_playlists_data = json.loads(get_playlists_response.text)
+
+    #Get list of playlist ids
+    playlists = get_playlists_data['items']
+    playlist_ids = []
+    for playlist in playlists:
+        playlist_ids.append(playlist['id'])
+
+    #Check if playlist id is in playlist_ids
+    return playlist_id in playlist_ids
+
+def get_playlist_tracks(playlist_id):
+    get_playlist_tracks_api_endpoint = f'{SPOTIFY_API_URL}/playlists/{playlist_id}/tracks'
+    get_playlist_tracks_response = requests.get(get_playlist_tracks_api_endpoint, headers=AUTHORIZATION_HEADER)
+    get_playlist_tracks_data = json.loads(get_playlist_tracks_response.text)
+    return get_playlist_tracks_data['items']
+
+"""
+def insert_playlist(db, playlist_id, username, time_range, limit, created, updated):
+    playlist = Playlist(playlist_id=playlist_id, username=username, time_range=time_range, tracks=limit, created=created, updated=updated)
+    db.session.add(playlist)
+    db.session.commit()
+    return
+"""

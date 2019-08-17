@@ -1,0 +1,30 @@
+{% extends "layout.html" %}
+
+{% block heading %}
+Playlists
+{% endblock %}
+
+{% block body %}
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="{{ url_for('home') }}">Home</a></li>
+    <li class="breadcrumb-item active" aria-current="page">Playlists</li>
+  </ol>
+</nav>
+
+{% for playlist in playlists %}
+<div class="row">
+  <div class="col-12">
+    <div class="card mb-3">
+      <div class="card-body">
+        <h5 class="card-title">{{ playlist.playlist_id }}</h5>
+        <h6 class="card-subtitle mb-2 text-muted">
+          {{ playlist.tracks }}
+        </h6>
+        <a href="{{ url_for('playlist', id=playlist.playlist_id) }}" class="btn btn-primary">View playlist</a>
+      </div>
+    </div>
+  </div>
+</div>
+{% endfor %}
+{% endblock %}
