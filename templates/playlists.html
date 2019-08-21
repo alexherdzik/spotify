@@ -21,7 +21,8 @@ Playlists
         <h6 class="card-subtitle mb-2 text-muted">
           {{ playlist.tracks }}
         </h6>
-        <a href="{{ url_for('playlist', id=playlist.playlist_id) }}" class="btn btn-primary">View playlist</a>
+        <a href="{{ url_for('playlist', id=playlist.playlist_id) }}" class="btn btn-secondary">View Playlist</a>
+        <a href="{{ url_for('check_playlist', id=playlist.playlist_id) }}" class="btn btn-primary">Check for Updates</a>
       </div>
     </div>
   </div>

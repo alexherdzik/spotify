@@ -143,6 +143,20 @@ def get_playlist_tracks(playlist_id):
     get_playlist_tracks_data = json.loads(get_playlist_tracks_response.text)
     return get_playlist_tracks_data['items']
 
+def get_tracks_added(tracks_new, tracks_old):
+    tracks_added = []
+    for track_new in tracks_new:
+        if not any(track_old['track']['id'] == track_new['id'] for track_old in tracks_old):
+            tracks_added.append(track_new)
+    return tracks_added
+
+def get_tracks_removed(tracks_old, tracks_new):
+    tracks_removed = []
+    for track_old in tracks_old:
+        if not any(track_new['id'] == track_old['track']['id'] for track_new in tracks_new):
+            tracks_removed.append(track_old)
+    return tracks_removed
+
 """
 def insert_playlist(db, playlist_id, username, time_range, limit, created, updated):
     playlist = Playlist(playlist_id=playlist_id, username=username, time_range=time_range, tracks=limit, created=created, updated=updated)

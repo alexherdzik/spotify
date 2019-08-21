@@ -1,6 +1,6 @@
 from flask import Flask, request, redirect, render_template, url_for
 from flask_sqlalchemy import SQLAlchemy
-from spotify import app_authorization, user_authorization, get_spotify_username, get_user_top_tracks, get_user_top_tracks_uris, create_user_playlist, add_tracks_to_playlist, get_playlist_id, convert_time_range, check_user_playlist, get_playlist_tracks
+from spotify import app_authorization, user_authorization, get_spotify_username, get_user_top_tracks, get_user_top_tracks_uris, create_user_playlist, add_tracks_to_playlist, get_playlist_id, convert_time_range, check_user_playlist, get_playlist_tracks, get_tracks_added, get_tracks_removed
 
 app = Flask(__name__)
 
@@ -77,3 +77,13 @@ def playlist():
     playlist_id = request.args.get('id', type=str)
     playlist_tracks = get_playlist_tracks(playlist_id)
     return render_template('playlist.html', tracks=playlist_tracks)
+
+@app.route('/check-playlist')
+def check_playlist():
+    playlist_id = request.args.get('id', type=str)
+    tracks_old = get_playlist_tracks(playlist_id)
+    playlist = Playlist.query.filter_by(playlist_id=playlist_id).first()
+    tracks_new = get_user_top_tracks(playlist.time_range, playlist.tracks)
+    tracks_added = get_tracks_added(tracks_new, tracks_old)
+    tracks_removed = get_tracks_removed(tracks_old, tracks_new)
+    return render_template('check_playlist.html', tracks_added=tracks_added, tracks_removed=tracks_removed)
