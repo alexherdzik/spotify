@@ -157,6 +157,15 @@ def get_tracks_removed(tracks_old, tracks_new):
             tracks_removed.append(track_old)
     return tracks_removed
 
+#Check status code at some point
+def replace_playlist_tracks(playlist_id, track_uris):
+    replace_playlist_tracks_api_endpoint = f'{SPOTIFY_API_URL}/playlists/{playlist_id}/tracks'
+    parameters = {
+        'uris': track_uris
+    }
+    replace_playlist_tracks_request = requests.put(replace_playlist_tracks_api_endpoint, json=parameters, headers=AUTHORIZATION_HEADER)
+    return
+
 """
 def insert_playlist(db, playlist_id, username, time_range, limit, created, updated):
     playlist = Playlist(playlist_id=playlist_id, username=username, time_range=time_range, tracks=limit, created=created, updated=updated)
