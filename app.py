@@ -1,6 +1,7 @@
 from flask import Flask, request, redirect, render_template, url_for
 from flask_sqlalchemy import SQLAlchemy
-from spotify import app_authorization, user_authorization, get_spotify_username, get_user_top_tracks, get_user_top_tracks_uris, create_user_playlist, add_tracks_to_playlist, get_playlist_id, convert_time_range, check_user_playlist, get_playlist_tracks, get_tracks_added, get_tracks_removed, replace_playlist_tracks
+#from spotify import app_authorization, user_authorization, get_spotify_username, get_user_top_tracks, get_user_top_tracks_uris, create_user_playlist, add_tracks_to_playlist, get_playlist_id, convert_time_range, check_user_playlist, get_playlist_tracks, get_tracks_added, get_tracks_removed, replace_playlist_tracks
+from spotify import *
 
 app = Flask(__name__)
 
@@ -94,4 +95,8 @@ def update_playlist():
     playlist = Playlist.query.filter_by(playlist_id=playlist_id).first()
     user_top_tracks_uris = get_user_top_tracks_uris(playlist.time_range, playlist.tracks)
     update = replace_playlist_tracks(playlist_id, user_top_tracks_uris)
+    return redirect(url_for('playlist', id=playlist_id))
+
+@app.route('/append-playlist')
+def append_playlist():
     return redirect(url_for('playlist', id=playlist_id))
