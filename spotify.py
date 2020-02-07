@@ -5,8 +5,8 @@ import datetime
 from flask import request
 
 #Client Keys
-CLIENT_ID = '55f1ab9c48f040d39629c869dbb40d9b'
-CLIENT_SECRET = '68729e4083a444ffa4924335343a82b9'
+CLIENT_ID = ''
+CLIENT_SECRET = ''
 CLIENT_CREDENTIALS = f'{CLIENT_ID}:{CLIENT_SECRET}'
 
 #Server Parameters
